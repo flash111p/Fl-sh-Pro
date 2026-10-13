@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - Flâsh Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="location.href='index.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-bolt-lightning"></i> Flâsh Pro
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="ai-chat.html" class="active">AI Chat</a>
+            <a href="ai-photo.html">AI Photo</a>
+            <a href="downloader.html">Downloader</a>
+        </nav>
+    </header>
+
+    <main class="chat-container">
+        <div class="chat-header">
+            <h2><i class="fa-solid fa-robot"></i> Flâsh AI Assistant</h2>
+            <p>Ask anything, brainstorm ideas, or solve coding problems.</p>
+        </div>
+        
+        <div class="chat-box" id="chatBox">
+            <div class="message ai-message">
+                <div class="msg-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="msg-content">Hello! I'm your Flâsh Pro AI assistant. How can I help you today?</div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="Type your message here..." autocomplete="off">
+            <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </main>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        function appendMessage(sender, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
+            
+            const iconDiv = document.createElement('div');
+            iconDiv.className = 'msg-icon';
+            iconDiv.innerHTML = sender === 'user' ? '<i class="fa-solid fa-user"></i>' : '<i class="fa-solid fa-bolt"></i>';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'msg-content';
+            contentDiv.textContent = text;
+            
+            if(sender === 'user') {
+                msgDiv.appendChild(contentDiv);
+                msgDiv.appendChild(iconDiv);
+            } else {
+                msgDiv.appendChild(iconDiv);
+                msgDiv.appendChild(contentDiv);
+            }
+            
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function handleSendMessage() {
+            const text = userInput.value.trim();
+            if(!text) return;
+            
+            appendMessage('user', text);
+            userInput.value = '';
+            
+            // Simulating AI response (Connect to your Vercel backend / API key here)
+            const loadingId = 'loading_' + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message ai-message';
+            loadingDiv.id = loadingId;
+            loadingDiv.innerHTML = '<div class="msg-icon"><i class="fa-solid fa-bolt"></i></div><div class="msg-content"><i class="fa-solid fa-spinner fa-spin"></i> Thinking...</div>';
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                document.getElementById(loadingId).remove();
+                appendMessage('ai', `That is an interesting question regarding "${text}". Flâsh Pro AI engine is ready to assist you further once connected to your backend API key!`);
+            }, 1000);
+        }
+
+        sendBtn.addEventListener('click', handleSendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') handleSendMessage();
+        });
+    </script>
+</body>
+</html>
