@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Photo Generator - Flâsh Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="location.href='index.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-bolt-lightning"></i> Flâsh Pro
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="ai-chat.html">AI Chat</a>
+            <a href="ai-photo.html" class="active">AI Photo</a>
+            <a href="downloader.html">Downloader</a>
+        </nav>
+    </header>
+
+    <main class="tool-container">
+        <div class="tool-header">
+            <h2><i class="fa-solid fa-wand-magic-sparkles"></i> AI Photo Generator</h2>
+            <p>Describe your imagination and watch the AI bring it to life instantly.</p>
+        </div>
+
+        <div class="generator-panel">
+            <div class="prompt-box">
+                <textarea id="imagePrompt" placeholder="E.g., A futuristic cyberpunk city at sunset with flying cars and neon lights, highly detailed..."></textarea>
+                <button id="generateBtn"><i class="fa-solid fa-sparkles"></i> Generate Image</button>
+            </div>
+
+            <div class="result-display" id="resultDisplay">
+                <div class="placeholder-art">
+                    <i class="fa-regular fa-image"></i>
+                    <p>Your generated artwork will appear here</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const imagePrompt = document.getElementById('imagePrompt');
+        const resultDisplay = document.getElementById('resultDisplay');
+
+        generateBtn.addEventListener('click', () => {
+            const promptText = imagePrompt.value.trim();
+            if(!promptText) {
+                alert('Please enter a description for your image!');
+                return;
+            }
+
+            resultDisplay.innerHTML = '<div class="spinner-box"><i class="fa-solid fa-spinner fa-spin fa-3x"></i><p>Generating artwork...</p></div>';
+
+            setTimeout(() => {
+                // Demo placeholder image based on Unsplash (Replace with DALL-E or Stable Diffusion API output)
+                resultDisplay.innerHTML = `
+                    <div class="image-output-card">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" alt="Generated AI Art">
+                        <div class="image-actions">
+                            <button class="btn-secondary" onclick="alert('Image downloaded!')"><i class="fa-solid fa-download"></i> Download HD</button>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
