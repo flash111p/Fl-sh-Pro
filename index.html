@@ -3,55 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flâsh Pro - All-in-One AI & Media Suite</title>
+    <title>Flâsh AI Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="navbar">
-        <div class="logo">
-            <i class="fa-solid fa-bolt-lightning"></i> Flâsh Pro
+    <!-- Top Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <i class="fa-solid fa-chevron-left" onclick="switchTab('chat')"></i>
+            <h2>Flâsh Ai</h2>
         </div>
-        <nav class="nav-links">
-            <a href="index.html" class="active">Home</a>
-            <a href="ai-chat.html">AI Chat</a>
-            <a href="ai-photo.html">AI Photo</a>
-            <a href="downloader.html">Downloader</a>
-        </nav>
+        <div class="header-right">
+            <span class="live-badge"><i class="fa-solid fa-circle"></i> LIVE</span>
+        </div>
     </header>
 
-    <main class="hero">
-        <div class="hero-badge">Next-Gen Web Suite</div>
-        <h1>Welcome to <span class="gradient-text">Flâsh Pro</span></h1>
-        <p>Your ultimate platform powered by advanced AI and lightning-fast media tools. Chat with intelligent AI, generate stunning images, and download videos seamlessly.</p>
-        
-        <div class="features-grid">
-            <div class="feature-card" onclick="location.href='ai-chat.html'">
-                <div class="icon-box chat-icon"><i class="fa-solid fa-comments"></i></div>
-                <h3>AI Assistant Chat</h3>
-                <p>Engage in smart, context-aware conversations with our high-speed AI model.</p>
-                <span class="link-text">Launch Chat <i class="fa-solid fa-arrow-right"></i></span>
+    <!-- Sub Bar (Model Selector) -->
+    <div class="sub-bar">
+        <div class="model-select-box">
+            <i class="fa-solid fa-bolt"></i>
+            <span id="currentModelName">3.6 Flash</span>
+        </div>
+        <button class="btn-new-chat" onclick="clearChat()"><i class="fa-solid fa-plus"></i> အသစ်</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="app-content">
+        <!-- 1. Chat Tab -->
+        <div id="tab-chat" class="tab-pane active">
+            <div class="chat-box" id="chatBox">
+                <div class="message ai-message">
+                    <div class="msg-content">မင်္ဂလာပါ။ မေးမြန်းစရာရှိသည်များကို မေးနိုင်ပါပြီ။</div>
+                </div>
             </div>
-            
-            <div class="feature-card" onclick="location.href='ai-photo.html'">
-                <div class="icon-box photo-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                <h3>AI Photo Generator</h3>
-                <p>Transform your textual prompts into breathtaking, high-definition visual artworks.</p>
-                <span class="link-text">Generate Art <i class="fa-solid fa-arrow-right"></i></span>
+            <div class="chat-input-container">
+                <input type="text" id="userInput" placeholder="Prompt သို့မဟုတ် မေးခွန်းရေး..." autocomplete="off">
+                <button id="sendBtn" onclick="sendMessage()"><i class="fa-solid fa-arrow-up"></i></button>
             </div>
-            
-            <div class="feature-card" onclick="location.href='downloader.html'">
-                <div class="icon-box download-icon"><i class="fa-solid fa-cloud-arrow-down"></i></div>
-                <h3>Universal Downloader</h3>
-                <p>Download HD videos instantly from TikTok, YouTube, and Facebook without watermarks.</p>
-                <span class="link-text">Start Downloading <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+
+        <!-- 2. History Tab -->
+        <div id="tab-history" class="tab-pane">
+            <div class="section-header"><h3>Chat History</h3></div>
+            <div id="historyList" class="history-list">
+                <p class="empty-text">မှတ်တမ်းများ မရှိသေးပါ။</p>
+            </div>
+        </div>
+
+        <!-- 3. Downloader Tab -->
+        <div id="tab-downloader" class="tab-pane">
+            <div class="section-header"><h3>Video Downloader</h3></div>
+            <div class="downloader-card">
+                <p>TikTok, YouTube, FB လင့်ခ်ထည့်ပါ</p>
+                <input type="text" id="dlUrl" placeholder="https://...">
+                <button class="btn-action" onclick="downloadVideo()"><i class="fa-solid fa-download"></i> Download</button>
+                <div id="dlResult" class="dl-result"></div>
+            </div>
+        </div>
+
+        <!-- 4. TTS Tab -->
+        <div id="tab-tts" class="tab-pane">
+            <div class="section-header"><h3>Text to Speech (Burmese)</h3></div>
+            <div class="tts-card">
+                <select id="ttsVoice">
+                    <option value="thiha">သီဟ (Male)</option>
+                    <option value="nilar">နီလာ (Female)</option>
+                </select>
+                <textarea id="ttsText" placeholder="အသံထွက်လိုသော မြန်မာစာသားရေးပါ..."></textarea>
+                <button class="btn-action" onclick="alert('TTS Generated!')"><i class="fa-solid fa-volume-high"></i> အသံထုတ်မည်</button>
+            </div>
+        </div>
+
+        <!-- 5. Settings Tab -->
+        <div id="tab-settings" class="tab-pane">
+            <div class="settings-card">
+                <h3><i class="fa-solid fa-gear"></i> Settings (Custom API Key)</h3>
+                <p>သင့်ကိုယ်ပိုင် Gemini API Key ကို ထည့်သွင်းနိုင်သည်။</p>
+                <label>Gemini API Key:</label>
+                <input type="password" id="customApiKey" placeholder="AQ... သို့မဟုတ် AIzaSy...">
+                <button class="btn-action" onclick="saveApiKey()"><i class="fa-solid fa-floppy-disk"></i> API Key သိမ်းဆည်းရန်</button>
             </div>
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Flâsh Pro. Built with Vercel Serverless & Modern Web Tech.</p>
-    </footer>
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a onclick="switchTab('chat')" class="nav-item active" id="nav-chat"><i class="fa-solid fa-comment"></i><span>Chat</span></a>
+        <a onclick="switchTab('history')" class="nav-item" id="nav-history"><i class="fa-solid fa-book-open"></i><span>History</span></a>
+        <a onclick="switchTab('downloader')" class="nav-item" id="nav-downloader"><i class="fa-solid fa-cloud-arrow-down"></i><span>Downloader</span></a>
+        <a onclick="switchTab('tts')" class="nav-item" id="nav-tts"><i class="fa-solid fa-volume-high"></i><span>TTS</span></a>
+        <a onclick="switchTab('settings')" class="nav-item" id="nav-settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.bottom-nav a').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.getElementById('nav-' + tabName).classList.add('active');
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('customApiKey').value.trim();
+            if(key) {
+                localStorage.setItem('user_gemini_key', key);
+                alert('API Key သိမ်းဆည်းပြီးပါပြီ!');
+            } else {
+                alert('ကျေးဇူးပြု၍ Key ထည့်ပါ။');
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML += `<div class="message user-message"><div class="msg-content">${text}</div></div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            let apiKey = localStorage.getItem('user_gemini_key') || "AQ.Ab8RN6JZSz6Zwx15uvuAv40K-AoSV60eLffHcur9bnR2k0DlLw";
+
+            const loadingId = 'load_' + Date.now();
+            chatBox.innerHTML += `<div class="message ai-message" id="${loadingId}"><div class="msg-content">စဉ်းစားနေသည်...</div></div>`;
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
+                });
+                const data = await res.json();
+                document.getElementById(loadingId).remove();
+
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "အမှားအယွင်း ရှိပါသည်။";
+                chatBox.innerHTML += `<div class="message ai-message"><div class="msg-content">${reply}</div></div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch(e) {
+                document.getElementById(loadingId).remove();
+                chatBox.innerHTML += `<div class="message ai-message"><div class="msg-content">ချိတ်ဆက်မှု မအောင်မြင်ပါ။</div></div>`;
+            }
+        }
+
+        function clearChat() {
+            document.getElementById('chatBox').innerHTML = `<div class="message ai-message"><div class="msg-content">စကားဝိုင်းအသစ် စတင်ပါပြီ။</div></div>`;
+        }
+
+        function downloadVideo() {
+            const url = document.getElementById('dlUrl').value;
+            if(!url) return alert('လင့်ခ်ထည့်ပါ');
+            document.getElementById('dlResult').innerHTML = '<p style="color:#f59e0b; margin-top:10px;">ဒေါင်းလုဒ်လုပ်ရန် အဆင်သင့်ဖြစ်ပါပြီ။</p><a href="#" class="btn-action" onclick="alert(\'Downloaded!\')">Save MP4</a>';
+        }
+    </script>
 </body>
 </html>
